@@ -8,5 +8,5 @@ aws s3 cp deploy/archive.zip s3://chatanoo-deployment/aws-cloudformation-cloudfr
 echo "Upload latest"
 aws s3api put-object \
   --bucket chatanoo-deployment \
-  --key infra/resources/aws-cloudformation-cloudfront-identity/latest.zip \
+  --key aws-cloudformation-cloudfront-identity/latest.zip \
   --website-redirect-location /chatanoo-deployment/aws-cloudformation-cloudfront-identity/$TRAVIS_TAG.zip
