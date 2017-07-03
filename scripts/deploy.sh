@@ -1,14 +1,12 @@
 #!/bin/bash
-# deploy.sh
 
-# Configuration
-AWS_PROFILE="delichty"
-BUCKET="ourpts-common-ohio-454844014023"
-S3PATH="lambda"
-PACKAGE="aws-cloudformation-cloudfront-identity.zip"
+node_modules/.bin/cfn-lambda zip --output deploy/archive.zip
 
-echo "Biulding the package"
-#node_modules/.bin/cfn-lambda zip --output deploy/archive.zip
+echo "Deploy $TRAVIS_TAG version to S3"
+aws s3 cp deploy/archive.zip s3://chatanoo-deployment/aws-cloudformation-cloudfront-identity/$TRAVIS_TAG.zip
 
-echo "Deploy version to S3"
-aws --profile ${AWS_PROFILE} s3 cp deploy/archive.zip s3://${BUCKET}/${S3PATH}/${PACKAGE}
+echo "Upload latest"
+aws s3api put-object \
+  --bucket chatanoo-deployment \
+  --key aws-cloudformation-cloudfront-identity/latest.zip \
+  --website-redirect-location /chatanoo-deployment/aws-cloudformation-cloudfront-identity/$TRAVIS_TAG.zip
